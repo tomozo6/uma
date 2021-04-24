@@ -1,2 +1,0 @@
-# uma
-User Management Automation
