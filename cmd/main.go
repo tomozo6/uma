@@ -8,7 +8,10 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-var version = "0.0.1"
+var (
+	Version  = "unset"
+	Revision = "unset"
+)
 
 // ----------------------------------------------------------------------------
 // main
@@ -36,7 +39,7 @@ func main() {
 	}
 
 	if showVersion {
-		fmt.Println("version:", version)
+		fmt.Println("version:", Version)
 		return
 	}
 
