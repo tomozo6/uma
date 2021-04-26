@@ -23,13 +23,16 @@ func main() {
 	// フラグハンドリング
 	// ----------------------------------------------------------------------------
 	var showHelp bool
-	flag.BoolVarP(&showHelp, "help", "h", false, "show help")
+	flag.BoolVarP(&showHelp, "help", "h", false, "show help.")
 
 	var showVersion bool
-	flag.BoolVarP(&showVersion, "version", "v", false, "show version")
+	flag.BoolVarP(&showVersion, "version", "v", false, "show version.")
+
+	var skipDelete bool
+	flag.BoolVarP(&skipDelete, "skip-delete", "s", false, "skip delete linux user.")
 
 	var targetIAMGroups []string
-	flag.StringSliceVarP(&targetIAMGroups, "target", "t", nil, "target iam groups")
+	flag.StringSliceVarP(&targetIAMGroups, "groups", "g", nil, "target iam groups.(ex: sre director app)")
 
 	flag.Parse()
 
@@ -93,28 +96,30 @@ func main() {
 	// ------------------------------------------------------------------------
 	// ユーザー削除
 	// ------------------------------------------------------------------------
-	// 対象IAMユーザー名のSliceを作成
-	// またIAMユーザー名から@以降の文字列を削除している
-	var targetUserNames []string
-	for _, v := range usersInfo.GroupsKeysForUsers {
-		targetUserNames = append(targetUserNames, strings.Split(v.UserName, "@")[0])
-	}
+	if skipDelete == false {
+		// 対象IAMユーザー名のSliceを作成
+		// またIAMユーザー名から@以降の文字列を削除している
+		var targetUserNames []string
+		for _, v := range usersInfo.GroupsKeysForUsers {
+			targetUserNames = append(targetUserNames, strings.Split(v.UserName, "@")[0])
+		}
 
-	// Linux上でUMAに管理されているユーザー名Sliceを作成
-	linuxUserNames, err := uma.ListLinuxUMAUser()
-	if err != nil {
-		fmt.Println("linuxUserListの取得に失敗しました。")
-		fmt.Println(err)
-	}
+		// Linux上でUMAに管理されているユーザー名Sliceを作成
+		linuxUserNames, err := uma.ListLinuxUMAUser()
+		if err != nil {
+			fmt.Println("linuxUserListの取得に失敗しました。")
+			fmt.Println(err)
+		}
 
-	// 対象ユーザーとなっていないUMA管理Linuxユーザーを削除
-	for _, v := range linuxUserNames {
-		if uma.Contains(targetUserNames, v) == false {
-			// Linuxユーザー削除
-			err := uma.DelLinuxUser(v)
-			if err != nil {
-				fmt.Printf("ユーザー(%s)の削除に失敗しました。", v)
-				fmt.Println(err)
+		// 対象ユーザーとなっていないUMA管理Linuxユーザーを削除
+		for _, v := range linuxUserNames {
+			if uma.Contains(targetUserNames, v) == false {
+				// Linuxユーザー削除
+				err := uma.DelLinuxUser(v)
+				if err != nil {
+					fmt.Printf("ユーザー(%s)の削除に失敗しました。", v)
+					fmt.Println(err)
+				}
 			}
 		}
 	}
