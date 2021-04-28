@@ -18,7 +18,7 @@ type Groups struct {
 }
 
 func NewGroups(groups []string) (*Groups, error) {
-	cfg, err := config.LoadDefaultConfig(context.TODO())
+	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion("us-east-1"))
 	if err != nil {
 		panic("configuration error, " + err.Error())
 	}

@@ -29,7 +29,7 @@ type GetGroupsKeysForUsersOutput struct {
 // }
 
 func NewUsers(userNames []string) (*Users, error) {
-	cfg, err := config.LoadDefaultConfig(context.TODO())
+	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion("us-east-1"))
 	if err != nil {
 		panic("configuration error, " + err.Error())
 	}
