@@ -4,7 +4,7 @@ before:
   hooks:
     - go mod tidy
 builds:
-  - main: ./cmd/main.go
+  - main: ./main.go
     env:
       - CGO_ENABLED=0
     ldflags:
@@ -16,11 +16,11 @@ archives:
     replacements:
       darwin: Darwin
       linux: Linux
-      windows: Windows
+#      windows: Windows
       386: i386
       amd64: x86_64
-    format_overrides:
-    - goos: windows
-      format: zip
+#    format_overrides:
+#    - goos: windows
+#      format: zip
 release:
   prerelease: auto
