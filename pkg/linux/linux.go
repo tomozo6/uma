@@ -1,4 +1,4 @@
-package uma
+package linux
 
 import (
 	"bufio"
@@ -9,13 +9,14 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/tomozo6/uma/pkg/types"
 )
 
 // ----------------------------------------------------------------------------
 // User 操作関連
 // ----------------------------------------------------------------------------
-func AddLinuxUser(params *GroupsKeysForUser) error {
-
+func UserAdd(params *types.GroupsKeysForUser) error {
 	userName := params.UserName
 
 	// リストをカンマ区切りの文字列に変換
@@ -100,7 +101,7 @@ func AddLinuxUser(params *GroupsKeysForUser) error {
 	return nil
 }
 
-func DelLinuxUser(userName string) error {
+func UserDel(userName string) error {
 	// ユーザー存在確認
 	if err := exec.Command("id", userName).Run(); err == nil {
 		// ユーザーが存在していたらユーザー削除
@@ -112,7 +113,7 @@ func DelLinuxUser(userName string) error {
 	return nil
 }
 
-func ListLinuxUMAUser() ([]string, error) {
+func ListUMAUser() ([]string, error) {
 	var s []string
 
 	// ファイルオープン
@@ -143,9 +144,6 @@ func ListLinuxUMAUser() ([]string, error) {
 
 func Contains(s []string, e string) bool {
 	for _, v := range s {
-		fmt.Println(v)
-		fmt.Println(e)
-
 		if v == e {
 			return true
 		}

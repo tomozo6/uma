@@ -1,4 +1,4 @@
-package uma
+package awsiam
 
 import (
 	"context"
@@ -7,6 +7,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
+	"github.com/tomozo6/uma/pkg/types"
 )
 
 // ----------------------------------------------------------------------------
@@ -18,14 +19,14 @@ type Users struct {
 }
 
 type GetGroupsKeysForUsersOutput struct {
-	GroupsKeysForUsers []*GroupsKeysForUser
+	GroupsKeysForUsers []*types.GroupsKeysForUser
 }
 
-type GroupsKeysForUser struct {
-	UserName          string
-	GroupNames        []string
-	SSHPublicKeyBodys []string
-}
+// type GroupsKeysForUser struct {
+// 	UserName          string
+// 	GroupNames        []string
+// 	SSHPublicKeyBodys []string
+// }
 
 func NewUsers(userNames []string) (*Users, error) {
 	cfg, err := config.LoadDefaultConfig(context.TODO())
@@ -118,7 +119,7 @@ func (u *Users) GetGroupsKeysForUsers(inputGroupList []string) (*GetGroupsKeysFo
 		// IAMユーザー名から@以降の文字列を削除
 		uName := strings.Split(userName, "@")[0]
 
-		l := GroupsKeysForUser{
+		l := types.GroupsKeysForUser{
 			UserName:          uName,
 			GroupNames:        GroupNames,
 			SSHPublicKeyBodys: SSHPublicKeyBodys,

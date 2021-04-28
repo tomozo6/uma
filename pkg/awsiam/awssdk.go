@@ -1,4 +1,4 @@
-package uma
+package awsiam
 
 import (
 	"context"
