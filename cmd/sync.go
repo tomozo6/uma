@@ -28,12 +28,13 @@ Synchronize AWS IAM users with Linux users.`,
 		// Groups構造体を生成
 		g, _ := awsiam.NewGroups(targetIAMGroups)
 
-		// 引数で与えられたグループ名のうち、サーバー上に存在しないグループをスライスから削除
-		if err := g.FilterOSGroup(); err != nil {
-			fmt.Println(err)
-		}
 		// 引数で与えられたグループ名のうち、AWS上に存在しないグループをスライスから削除
 		if err := g.FilterIAMGroup(); err != nil {
+			fmt.Println(err)
+		}
+
+		// 引数で与えられたグループ名のうち、サーバー上に存在しないグループをサーバー上に作成
+		if err := g.AddOSGroup(); err != nil {
 			fmt.Println(err)
 		}
 

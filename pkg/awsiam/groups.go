@@ -66,6 +66,17 @@ func (g *Groups) FilterOSGroup() error {
 	return nil
 }
 
+func (g *Groups) AddOSGroup() error {
+	for _, v := range g.GroupNames {
+		if out, err := exec.Command("groupadd", v, "-f").CombinedOutput(); err != nil {
+			fmt.Println("Command Exec Error.")
+			fmt.Printf("groupadd result: \n%s", string(out))
+			return err
+		}
+	}
+	return nil
+}
+
 func (g *Groups) GetIAMUserNames() ([]string, error) {
 	var s []string
 
